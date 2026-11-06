@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#102a43">
+<title>মোটরসাইকেল পার্কিং</title>
+<style>
+:root{--navy:#102a43;--blue:#1769aa;--bg:#f3f6fa;--ink:#172b4d;--muted:#62748a;--line:#dce4ed;--green:#16845b;--red:#c43d3d}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,"Noto Sans Bengali",sans-serif}
+header{background:linear-gradient(135deg,#102a43,#1769aa);color:white;padding:22px 16px 18px}
+header h1{font-size:22px;margin:0 0 5px}header p{margin:0;color:#d9e8f5;font-size:13px}
+main{max-width:850px;margin:auto;padding:14px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin:0 0 14px}
+.stat,.panel{background:white;border:1px solid var(--line);border-radius:14px;padding:13px;box-shadow:0 2px 8px #102a4308}
+.stat small{display:block;color:var(--muted);font-size:12px}.stat strong{font-size:22px;display:block;margin-top:5px}
+.tabs{display:flex;gap:7px;overflow:auto;margin:0 0 12px}
+.tab{border:1px solid var(--line);background:white;color:var(--ink);border-radius:10px;padding:10px 13px;white-space:nowrap;font-weight:650}
+.tab.active{background:var(--navy);color:white;border-color:var(--navy)}
+.panel{margin-bottom:12px}.panel h2{font-size:17px;margin:0 0 12px}
+label{display:block;font-size:13px;font-weight:650;margin:10px 0 5px}
+input,select{width:100%;padding:12px;border:1px solid #cbd6e2;border-radius:10px;font:inherit;background:#fff;color:var(--ink)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+button{border:0;border-radius:10px;padding:12px 14px;font:inherit;font-weight:700;cursor:pointer}
+.primary{background:var(--blue);color:white;width:100%;margin-top:14px}.secondary{background:#e8f0f7;color:var(--navy)}.danger{background:#fff0f0;color:var(--red)}
+.item{border:1px solid var(--line);border-radius:11px;padding:12px;margin-top:9px;background:#fff}
+.itemtop{display:flex;justify-content:space-between;gap:10px;align-items:start}
+.pill{font-size:11px;background:#e8f5ef;color:var(--green);padding:4px 8px;border-radius:20px;white-space:nowrap}
+.muted{color:var(--muted);font-size:12px;line-height:1.6}.hidden{display:none!important}
+.rowbtn{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.rowbtn button{flex:1}
+.notice{background:#fff8e6;border:1px solid #f1dda6;padding:10px;border-radius:10px;font-size:12px;line-height:1.6;color:#6b5214}
+.empty{text-align:center;color:var(--muted);padding:24px 8px}
+footer{text-align:center;color:var(--muted);font-size:11px;padding:10px 0 22px}
+@media(max-width:480px){.stats{gap:6px}.stat{padding:10px}.stat strong{font-size:19px}.grid{grid-template-columns:1fr}}
+@media print{header,.tabs,.no-print,footer{display:none!important}body{background:white}.panel{box-shadow:none}}
+</style>
+</head>
+<body>
+<header><h1>🏍️ মোটরসাইকেল পার্কিং</h1><p>অফলাইন পার্কিং হিসাব ও টিকিট ব্যবস্থাপনা</p></header>
+<main>
+ <section class="stats">
+  <div class="stat"><small>এখন পার্কিংয়ে</small><strong id="activeCount">০</strong></div>
+  <div class="stat"><small>আজ ফেরত</small><strong id="todayCount">০</strong></div>
+  <div class="stat"><small>আজকের আয়</small><strong id="todayIncome">৳০</strong></div>
+ </section>
+ <nav class="tabs no-print">
+  <button class="tab active" data-tab="entry">＋ নতুন পার্কিং</button>
+  <button class="tab" data-tab="checkout">বাইক ফেরত</button>
+  <button class="tab" data-tab="list">পার্কিং তালিকা</button>
+  <button class="tab" data-tab="settings">সেটিংস / হিসাব</button>
+ </nav>
+ <section id="entry" class="panel page">
+  <h2>নতুন বাইক পার্কিং এন্ট্রি</h2>
+  <form id="entryForm">
+   <div class="grid">
+    <div><label for="name">গ্রাহকের নাম *</label><input id="name" required maxlength="60" placeholder="নাম লিখুন"></div>
+    <div><label for="last4">মোবাইলের শেষ ৪ ডিজিট *</label><input id="last4" required inputmode="numeric" pattern="[0-9০-৯]{4}" maxlength="4" placeholder="যেমন ১২৩৪"></div>
+    <div><label for="plate">বাইকের রেজিস্ট্রেশন নম্বর *</label><input id="plate" required maxlength="30" placeholder="যেমন ঢাকা মেট্রো-ল ১২-৩৪৫৬"></div>
+    <div><label for="model">বাইকের মডেল (ঐচ্ছিক)</label><input id="model" maxlength="40" placeholder="যেমন Honda"></div>
+    <div><label for="color">বাইকের রং (ঐচ্ছিক)</label><input id="color" maxlength="30" placeholder="যেমন কালো"></div>
+   </div>
+   <button class="primary" type="submit">টিকিট তৈরি ও পার্কিং সংরক্ষণ</button>
+  </form>
+  <p class="muted">এন্ট্রি করার পর টিকিট নম্বর দেখাবে। গ্রাহককে টিকিট নম্বরটি দিন বা লিখে রাখুন।</p>
+ </section>
+ <section id="checkout" class="panel page hidden">
+  <h2>বাইক ফেরত / গ্রাহক যাচাই</h2>
+  <label for="searchOut">টিকিট নম্বর, নাম বা বাইকের নম্বর দিয়ে খুঁজুন</label>
+  <input id="searchOut" placeholder="সার্চ করুন...">
+  <div id="checkoutResults"><div class="empty">প্রথমে উপরে সার্চ করুন।</div></div>
+  <div id="verifyBox" class="item hidden">
+   <h3 style="margin:0 0 8px">গ্রাহকের তথ্য মিলিয়ে নিন</h3>
+   <div id="selectedInfo" class="muted"></div>
+   <label for="verifyName">গ্রাহকের বলা নাম</label><input id="verifyName" placeholder="নাম লিখুন">
+   <label for="verifyLast4">মোবাইলের শেষ ৪ ডিজিট</label><input id="verifyLast4" maxlength="4" inputmode="numeric" placeholder="শেষ ৪ ডিজিট">
+   <label for="verifyPlate">বাইকের নম্বর</label><input id="verifyPlate" placeholder="বাইকের নম্বর">
+   <div id="feePreview" class="notice" style="margin-top:10px"></div>
+   <button class="primary" id="completeCheckout">তথ্য মিলেছে — বিল নিয়ে বাইক ফেরত দিন</button>
+   <button class="secondary" id="cancelCheckout" style="width:100%;margin-top:8px">বাতিল</button>
+  </div>
+ </section>
+ <section id="list" class="panel page hidden">
+  <h2>বর্তমানে পার্কিংয়ে থাকা বাইক</h2>
+  <label for="listSearch">তালিকা খুঁজুন</label><input id="listSearch" placeholder="নাম / টিকিট / বাইক নম্বর">
+  <div id="activeList"></div>
+ </section>
+ <section id="settings" class="panel page hidden">
+  <h2>পার্কিং সেটিংস</h2>
+  <label for="hourRate">প্রতি ঘণ্টার চার্জ (টাকা)</label><input id="hourRate" type="number" min="0" step="1" value="20">
+  <p class="muted">হিসাব: প্রতি শুরু হওয়া ঘণ্টা হিসেবে চার্জ হবে; ১ ঘণ্টার কম হলেও ১ ঘণ্টা ধরা হবে।</p>
+  <button class="primary" id="saveSettings">চার্জ সংরক্ষণ</button>
+  <hr style="border:0;border-top:1px solid var(--line);margin:18px 0">
+  <h2>হিসাব ও ব্যাকআপ</h2>
+  <div class="grid">
+   <div class="stat"><small>মোট ফেরত</small><strong id="allCount">০</strong></div>
+   <div class="stat"><small>মোট আয়</small><strong id="allIncome">৳০</strong></div>
+  </div>
+  <div class="rowbtn">
+   <button class="secondary" id="exportBtn">ব্যাকআপ ডাউনলোড</button>
+   <button class="secondary" id="printBtn">হিসাব প্রিন্ট</button>
+  </div>
+  <label for="importFile">আগের ব্যাকআপ ফিরিয়ে আনুন</label><input id="importFile" type="file" accept="application/json">
+  <p class="notice">ডেটা এই মোবাইলের ব্রাউজারেই থাকে। ব্রাউজারের ডেটা মুছে গেলে তথ্য হারাতে পারে—নিয়মিত ব্যাকআপ ডাউনলোড করে রাখুন। অন্য ফোনে নিজে থেকে সিঙ্ক হবে না।</p>
+  <p class="muted">গ্রাহকের নাম, শেষ ৪ ডিজিট ও বাইকের তথ্য ফেরত দেওয়ার পর মুছে যাবে। শুধু মোট আয়, ফেরতের সংখ্যা ও তারিখের সারাংশ থাকবে।</p>
+ </section>
+ <footer>অফলাইন ব্যবহারের জন্য তৈরি • ডেটা শুধু এই ডিভাইসে সংরক্ষিত</footer>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+const bn=n=>String(n).replace(/\d/g,d=>"০১২৩৪৫৬৭৮৯"[d]);
+const digits=s=>String(s||"").replace(/[০-৯]/g,d=>"০১২৩৪৫৬৭৮৯".indexOf(d)).replace(/\D/g,"");
+const norm=s=>String(s||"").trim().toLocaleLowerCase("bn");
+const load=(k,def)=>{try{return JSON.parse(localStorage.getItem(k))??def}catch{return def}};
+let active=load("park_active",[]), history=load("park_history",[]), rate=Number(load("park_rate",20)), selected=null;
+function save(){localStorage.setItem("park_active",JSON.stringify(active));localStorage.setItem("park_history",JSON.stringify(history));localStorage.setItem("park_rate",JSON.stringify(rate));render()}
+function money(n){return "৳"+bn(Math.round(n))}
+function dateKey(d){let x=new Date(d);return x.getFullYear()+"-"+(x.getMonth()+1)+"-"+x.getDate()}
+function duration(start,end=Date.now()){return Math.max(1,Math.ceil((end-start)/3600000))}
+function fee(item){return duration(item.createdAt)*rate}
+function ticket(){return "PK-"+Date.now().toString().slice(-8)}
+function render(){
+ $("activeCount").textContent=bn(active.length);
+ let today=history.filter(x=>dateKey(x.closedAt)===dateKey(Date.now()));
+ $("todayCount").textContent=bn(today.length);$("todayIncome").textContent=money(today.reduce((a,x)=>a+x.fee,0));
+ $("allCount").textContent=bn(history.length);$("allIncome").textContent=money(history.reduce((a,x)=>a+x.fee,0));
+ $("hourRate").value=rate;renderList();renderCheckout();
+}
+function renderList(){
+ let q=norm($("listSearch").value), rows=active.filter(x=>[x.name,x.ticket,x.plate].some(v=>norm(v).includes(q)));
+ $("activeList").innerHTML=rows.length?rows.map(x=>`<div class="item"><div class="itemtop"><b>${esc(x.name)}</b><span class="pill">${esc(x.ticket)}</span></div><div class="muted">বাইক: ${esc(x.plate)} • ফোনের শেষ ৪: ${esc(x.last4)}<br>প্রবেশ: ${new Date(x.createdAt).toLocaleString("bn-BD")}<br>এখন পর্যন্ত আনুমানিক বিল: ${money(fee(x))}</div></div>`).join(""):'<div class="empty">কোনো বাইক পাওয়া যায়নি।</div>';
+}
+function renderCheckout(){
+ let q=norm($("searchOut").value), rows=active.filter(x=>[x.name,x.ticket,x.plate].some(v=>norm(v).includes(q)));
+ $("checkoutResults").innerHTML=q?(rows.length?rows.map(x=>`<div class="item"><div class="itemtop"><b>${esc(x.name)}</b><span class="pill">${esc(x.ticket)}</span></div><div class="muted">${esc(x.plate)} • প্রবেশ ${new Date(x.createdAt).toLocaleString("bn-BD")}</div><button class="secondary" style="width:100%;margin-top:8px" onclick="choose('${x.id}')">এই বাইকটি নির্বাচন</button></div>`).join(""):'<div class="empty">মিল পাওয়া যায়নি।</div>'):'<div class="empty">টিকিট / নাম / বাইকের নম্বর লিখুন।</div>';
+}
+function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function choose(id){selected=active.find(x=>x.id===id);if(!selected)return;$("verifyBox").classList.remove("hidden");$("selectedInfo").innerHTML=`নাম: <b>${esc(selected.name)}</b><br>ফোনের শেষ ৪: <b>${esc(selected.last4)}</b><br>বাইক: <b>${esc(selected.plate)}</b><br>টিকিট: <b>${esc(selected.ticket)}</b><br>প্রবেশ: ${new Date(selected.createdAt).toLocaleString("bn-BD")}`;$("feePreview").textContent=`সময়: ${bn(duration(selected.createdAt))} ঘণ্টা (প্রতি শুরু হওয়া ঘণ্টা) • বিল: ${money(fee(selected))}`;$("verifyName").value="";$("verifyLast4").value="";$("verifyPlate").value=""}
+function clearSelection(){selected=null;$("verifyBox").classList.add("hidden")}
+document.querySelectorAll(".tab").forEach(b=>b.addEventListener("click",()=>{document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("active",x===b));document.querySelectorAll(".page").forEach(p=>p.classList.toggle("hidden",p.id!==b.dataset.tab));}));
+$("entryForm").addEventListener("submit",e=>{e.preventDefault();let item={id:crypto.randomUUID?crypto.randomUUID():String(Date.now()),ticket:ticket(),name:$("name").value.trim(),last4:digits($("last4").value).slice(-4),plate:$("plate").value.trim(),model:$("model").value.trim(),color:$("color").value.trim(),createdAt:Date.now()};if(item.last4.length!==4){alert("মোবাইলের শেষ ৪ ডিজিট লিখুন।");return}if(active.some(x=>norm(x.plate)===norm(item.plate))){if(!confirm("এই বাইকের নম্বরটি আগে থেকেই পার্কিংয়ে আছে। তবুও সংরক্ষণ করবেন?"))return}active.push(item);save();e.target.reset();alert("পার্কিং সংরক্ষণ হয়েছে।\\nটিকিট নম্বর: "+item.ticket+"\\nগ্রাহককে টিকিট নম্বরটি দিন।")});
+$("searchOut").addEventListener("input",renderCheckout);$("listSearch").addEventListener("input",renderList);
+$("cancelCheckout").onclick=clearSelection;
+$("completeCheckout").onclick=()=>{if(!selected)return;let ok=norm($("verifyName").value)===norm(selected.name)&&digits($("verifyLast4").value).slice(-4)===selected.last4&&norm($("verifyPlate").value)===norm(selected.plate);if(!ok){alert("তথ্য মিলেনি। নাম, শেষ ৪ ডিজিট ও বাইকের নম্বর আবার যাচাই করুন।");return}let amount=fee(selected),closedAt=Date.now();if(!confirm("বিল "+money(amount)+"। টাকা গ্রহণ করে বাইক ফেরত দিয়েছেন? নিশ্চিত করলে গ্রাহকের ব্যক্তিগত তথ্য মুছে যাবে।"))return;history.push({closedAt,fee:amount});active=active.filter(x=>x.id!==selected.id);clearSelection();$("searchOut").value="";save();alert("বাইক ফেরত সম্পন্ন। গ্রাহকের ব্যক্তিগত তথ্য মুছে ফেলা হয়েছে। বিল: "+money(amount))};
+$("saveSettings").onclick=()=>{rate=Math.max(0,Number($("hourRate").value)||0);save();alert("চার্জ সংরক্ষণ হয়েছে।")};
+$("exportBtn").onclick=()=>{let data={version:1,active,history,rate,exportedAt:new Date().toISOString()};let blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});let a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="parking-backup-"+dateKey(Date.now())+".json";a.click();URL.revokeObjectURL(a.href)};
+$("importFile").onchange=async e=>{let f=e.target.files[0];if(!f)return;try{let d=JSON.parse(await f.text());if(!Array.isArray(d.active)||!Array.isArray(d.history))throw Error();if(!confirm("ব্যাকআপ ফিরিয়ে আনলে বর্তমান ডেটা প্রতিস্থাপিত হবে। চালিয়ে যাবেন?"))return;active=d.active;history=d.history;rate=Number(d.rate)||20;save();alert("ব্যাকআপ ফিরিয়ে আনা হয়েছে।")}catch{alert("ব্যাকআপ ফাইলটি সঠিক নয়।")}e.target.value=""};
+$("printBtn").onclick=()=>window.print();
+render();
+</script>
+</body></html>
